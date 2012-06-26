@@ -43,6 +43,14 @@ class Feature < ActiveRecord::Base
     state == 'refactor'
   end
 
+  def name
+    if super.blank?
+      'unnamed feature'
+    else
+      super
+    end
+  end
+
   def test!
     update_attributes(:state => 'test')
   end
