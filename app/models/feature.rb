@@ -23,8 +23,19 @@ class Feature < ActiveRecord::Base
   validates_presence_of :username
   # validates_inclusion_of :state, :in => Feature::VALID_STATES
 
+  def self.find_last_feature_for_user(username)
+    Feature.find(
+      :last,
+      :conditions => ['username = ? AND state <> ?', username, Feature.finished_state]
+    )
+  end
+
   def self.initial_state
     VALID_STATES.first
+  end
+
+  def self.finished_state
+    VALID_STATES.last
   end
 
   def question
@@ -54,6 +65,11 @@ class Feature < ActiveRecord::Base
   def test!
     update_attributes(:state => 'test')
   end
+
+  def finish!
+    update_attributes(:state => 'finished')
+  end
+
 
   def next!
     return false if finished?

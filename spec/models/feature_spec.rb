@@ -30,6 +30,45 @@ describe Feature do
     end
   end
 
+  describe ".finished_state" do
+    it "should return the last state in the list" do
+      Feature.finished_state.should == 'finished'
+    end
+  end
+
+  describe ".find_last_feature_for_user" do
+    context "user has one or more features in an unfinished state" do
+      it "should return the first unfinished feature" do
+        features = []
+        3.times do |i|
+          features << Feature.create!(:username => 'xxx', :name => "feature #{i}", :state => Feature.initial_state)
+        end
+        Feature.find_last_feature_for_user('xxx').id.should == features.last.id
+      end
+    end
+    context "user has no features" do
+      it "should return nil" do
+        Feature.find_last_feature_for_user('xxx').should be_nil
+      end
+    end
+    context "user has no features in unfinished state" do
+      it "should return nil" do
+        3.times do |i|
+          f = Feature.create!(:username => 'xxx', :name => "feature #{i}", :state => Feature.finished_state)
+          f.finish!
+        end
+        Feature.find_last_feature_for_user('xxx').should be_nil
+      end
+    end
+  end
+
+  describe '#finish!' do
+    it 'should set the feature state to "finished"' do
+      @feature.should_receive(:update_attributes).with({:state => Feature.finished_state})
+      @feature.finish!
+    end
+  end
+
   describe "#question" do
     it "should return the question text for the right state" do
       Feature::VALID_STATES.each do |valid_state|
