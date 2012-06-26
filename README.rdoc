@@ -1,0 +1,5 @@
+== Pair Programming Twitter Bot
+
+With apologies to Jim Weirich and PairProgrammingBot.com
+
+tl;dr
