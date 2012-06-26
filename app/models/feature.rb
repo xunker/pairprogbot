@@ -16,7 +16,7 @@ class Feature < ActiveRecord::Base
     'refactor' => 'Refactor the code.'
   }
 
-  attr_accessible :username, :name
+  attr_accessible :username, :name, :state
 
   before_create :set_initial_state
 
@@ -37,6 +37,14 @@ class Feature < ActiveRecord::Base
 
   def finished?
     state == VALID_STATES.last
+  end
+
+  def refactor?
+    state == 'refactor'
+  end
+
+  def test!
+    update_attributes(:state => 'test')
   end
 
   def next!
@@ -75,7 +83,7 @@ class Feature < ActiveRecord::Base
     when 'n', /^no/
       false
     else
-      false
+      nil
     end
   end
 

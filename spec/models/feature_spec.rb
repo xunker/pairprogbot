@@ -6,6 +6,8 @@ describe Feature do
       :username => 'foo',
       :name => 'bar'
     }
+
+    @feature = Feature.new
   end
 
   # it "should be instantiated" do
@@ -51,9 +53,6 @@ describe Feature do
   end
 
   describe "#finished?" do
-    before(:each) do
-      @feature = Feature.new
-    end
     context "state is 'finished'" do
       it "should be true" do
         @feature.stub!(:state).and_return(Feature::VALID_STATES.last)
@@ -69,9 +68,6 @@ describe Feature do
   end
 
   describe "#completed?" do
-    before(:each) do
-      @feature = Feature.new
-    end
     context "state is 'refactor'" do
       before(:each) do
         @feature.stub!(:state).and_return('refactor')
@@ -116,8 +112,29 @@ describe Feature do
 
       Feature.answer_text_to_boolean('nope').should be_false
     end
-    it "should convert things that don't look like either to false" do
-      Feature.answer_text_to_boolean('poop').should be_false
+    it "should convert things that don't look like either to nil" do
+      Feature.answer_text_to_boolean('poop').should be_nil
+    end
+  end
+
+  describe '#test!' do
+    it 'should set the current start to "test"' do
+      @feature.should_receive(:update_attributes).with({:state => 'test'})
+      @feature.test!
+    end
+  end
+
+  describe '#refactor?' do
+    before(:each) do
+      @feature = Feature.new
+    end
+    it 'should be true if the state is "refactor"' do
+      @feature.stub!(:state).and_return('refactor')
+      @feature.refactor?.should be_true
+    end
+    it "should be false if the current state is not 'refactor'" do
+      @feature.stub!(:state).and_return('test')
+      @feature.refactor?.should be_false
     end
   end
 
