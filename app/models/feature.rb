@@ -7,14 +7,15 @@ class Feature < ActiveRecord::Base
     'new' => 'Do you have a test for that?',
     'test' => 'Does the test pass?',
     'refactor' => 'Need to refactor?',
-    'finished' => 'Select a new feature to implement'
+    'finished' => 'Feature complete. Select a new feature to implement.'
   }
 
   NEGATIVE_ANSWER_TEXT = {
     'new' => 'Write a test.',
-    'test' => 'Write just enough code for the test to pass',
+    'test' => 'Write just enough code for the test to pass.',
     'refactor' => 'Refactor the code.'
   }
+  TEST_PASS_APPEND = "Does the test pass?"
 
   attr_accessible :username, :name, :state
 
@@ -43,7 +44,7 @@ class Feature < ActiveRecord::Base
   end
 
   def negative_answer
-    NEGATIVE_ANSWER_TEXT[state]
+    [NEGATIVE_ANSWER_TEXT[state], TEST_PASS_APPEND].join(' ')
   end
 
   def finished?

@@ -22,6 +22,8 @@ class Interacter
 
   def normalize_command(cmd)
     case cmd
+    when 'hello', 'help'
+      'hello'
     when 'start', 'feature'
       'feature'
     when /^yes/, /^yea/, 'y'
@@ -72,10 +74,18 @@ class Interacter
   def command_feature(name)
     if @feature.nil? || @feature.finished?
       @feature = Feature.find_or_create_by_username_and_name(:username => username, :name => name)
-      "starting feature #{@feature.name}"
+      "starting feature #{@feature.name}. #{@feature.question}"
     else
       "You are in the middle of #{@feature.name}! You can't start a new feature until you complete the old one!"
     end
+  end
+
+  def command_where(garbage)
+    @feature.present? ? "We were at: #{@feature.question}" : "We're not working on anything yet."
+  end
+
+  def command_what(garbage)
+    @feature.present? ? "We are working on #{@feature.name}" : "We're not working on anything yet."
   end
 
   def command_yes(garbage)
@@ -87,13 +97,13 @@ class Interacter
   end
 
   def answer(answer)
-    puts "'"+answer.to_s+"'"
     if @feature.completed?(answer)
       @feature.next!
       return @feature.question
     else
+      str = @feature.negative_answer
       @feature.test! if @feature.refactor?
-      return @feature.negative_answer
+      return str
     end
   end
 

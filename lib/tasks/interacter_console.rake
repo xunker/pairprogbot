@@ -8,7 +8,6 @@ task :interacter_console => :environment do
   cmd = ""
   until cmd == "exit" do
     if interacter.feature
-      puts "\tFeature is complete" if interacter.feature.finished?
       puts "\t#{interacter.feature.question}"
     end
 
