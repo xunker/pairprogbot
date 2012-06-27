@@ -30,6 +30,8 @@ class Interacter
       'yes'
     when 'no', 'nope', 'n'
       'no'
+    when /^stop/, /^finish/, /^abandon/
+      'finish'
     else
       cmd
     end
@@ -49,6 +51,15 @@ class Interacter
         str << " We have worked on #{features.size} features in the past."
       end
       str
+    end
+  end
+
+  def command_finish(garbage)
+    if @feature.present?
+      @feature.finish!
+      "OK, #{@feature.name} marked as finished."
+    else
+      "We aren't working on anything."
     end
   end
 
