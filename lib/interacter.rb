@@ -26,7 +26,7 @@ class Interacter
       'hello'
     when 'start', 'feature'
       'feature'
-    when /^yes/, /^yea/, 'y'
+    when /^yes/, /^yea/, 'y', 'ok', 'k'
       'yes'
     when 'no', 'nope', 'n'
       'no'

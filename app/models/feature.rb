@@ -12,8 +12,8 @@ class Feature < ActiveRecord::Base
 
   NEGATIVE_ANSWER_TEXT = {
     'new' => 'Write a test.',
-    'test' => 'Write just enough code for the test to pass.',
-    'refactor' => 'Refactor the code.'
+    'test' => 'Write just enough code for the test to pass. Does the test pass?',
+    'refactor' => 'Refactor the code. Does the test pass?'
   }
   TEST_PASS_APPEND = "Does the test pass?"
 
@@ -44,7 +44,7 @@ class Feature < ActiveRecord::Base
   end
 
   def negative_answer
-    [NEGATIVE_ANSWER_TEXT[state], TEST_PASS_APPEND].join(' ')
+    NEGATIVE_ANSWER_TEXT[state]
   end
 
   def finished?
