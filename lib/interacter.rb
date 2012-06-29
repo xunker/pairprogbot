@@ -22,13 +22,11 @@ class Interacter
 
   def normalize_command(cmd)
     case cmd
-    when 'hello', 'help'
-      'hello'
     when 'start', 'feature'
       'feature'
-    when /^yes/, /^yea/, 'y', 'ok', 'k'
+    when /^yes/, /^yea/, 'y', 'ok', 'k', 'it does'
       'yes'
-    when 'no', 'nope', 'n'
+    when /^no/, 'nope', 'n', 'it does not', "it doesn't"
       'no'
     when /^stop/, /^finish/, /^abandon/
       'finish'
@@ -40,6 +38,11 @@ class Interacter
   def command(command_string)
     (cmd, args) = process_command(command_string)
     response = self.send("command_#{normalize_command(cmd)}".to_sym, args)
+    response
+  end
+
+  def command_help(garbage)
+    "My command list lives at http://n4k3d.com/?p=230"
   end
 
   def command_hello(garbage)
@@ -108,19 +111,23 @@ class Interacter
   end
 
   def answer(answer)
-    if @feature.completed?(answer)
-      @feature.next!
-      return @feature.question
+    if @feature
+      if @feature.completed?(answer)
+        @feature.next!
+        return @feature.question
+      else
+        str = @feature.negative_answer
+        @feature.test! if @feature.refactor?
+        return str
+      end
     else
-      str = @feature.negative_answer
-      @feature.test! if @feature.refactor?
-      return str
+      "we aren't working on a feature right now."
     end
   end
 
   def method_missing(m, *args, &block)
     if m.to_s =~ /^command_/
-      "I don't know what you meant there."
+      "I don't know what you meant there. If you need help please check http://n4k3d.com/?p=230 . I love you."
     else
       super
     end
