@@ -2,4 +2,7 @@
 
 With apologies to Jim Weirich and PairProgrammingBot.com
 
+This is a Rails app, but it has no business being one.  It's all controlled via some rake tasks.
+
+
 tl;dr

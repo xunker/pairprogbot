@@ -22,6 +22,8 @@ class Interacter
 
   def normalize_command(cmd)
     case cmd
+    when /^i\s/
+      'i'
     when 'start', 'feature'
       'feature'
     when /^yes/, /^yea/, 'y', 'ok', 'k', 'it does'
@@ -39,6 +41,17 @@ class Interacter
     (cmd, args) = process_command(command_string)
     response = self.send("command_#{normalize_command(cmd)}".to_sym, args)
     response
+  end
+
+  def command_i(platitude)
+    case platitude
+    when /love you/
+      "No, Scruffy, I am wash bucket. I love you. Wash bucket has always loved you."
+    when /hate you/
+      "I don't believe you."
+    else
+      "I #{platitude}, too."
+    end
   end
 
   def command_help(garbage)

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120629190752) do
+ActiveRecord::Schema.define(:version => 20120629210628) do
 
   create_table "features", :force => true do |t|
     t.string   "username",   :null => false
@@ -23,6 +23,19 @@ ActiveRecord::Schema.define(:version => 20120629190752) do
 
   add_index "features", ["username", "name"], :name => "index_features_on_username_and_name", :unique => true
   add_index "features", ["username"], :name => "index_features_on_username"
+
+  create_table "messages", :force => true do |t|
+    t.integer  "message_id",                    :null => false
+    t.string   "from_user",                     :null => false
+    t.string   "content",                       :null => false
+    t.boolean  "answered",   :default => false
+    t.boolean  "error",      :default => false
+    t.datetime "created_at",                    :null => false
+    t.datetime "updated_at",                    :null => false
+  end
+
+  add_index "messages", ["from_user"], :name => "index_messages_on_from_user"
+  add_index "messages", ["message_id"], :name => "index_messages_on_message_id", :unique => true
 
   create_table "tweets", :force => true do |t|
     t.integer  "tweet_id",                      :null => false
